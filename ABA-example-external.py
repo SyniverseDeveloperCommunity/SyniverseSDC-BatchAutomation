@@ -4,8 +4,10 @@
 
 # uses one non-standard Python Library -> Requests
 # see http://docs.python-requests.org/en/master/
+# zlib is used to decompress the output file
 
 import time
+import zlib
 import requests
 
 # this will be your access token
@@ -120,5 +122,7 @@ download_output_headers ={'Authorization': 'Bearer ' + access_token, 'int-compan
 
 download_output_response = requests.get(output_file_uri, headers=download_output_headers)
 
+output_data = zlib.decompress(download_output_response.content, zlib.MAX_WBITS|32)
+
 print 'Download output status code: ' + str(download_output_response.status_code)
-print 'Download output response: \n' + download_output_response.text
+print 'Download output response: \n' + output_data
